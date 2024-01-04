@@ -1,0 +1,70 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <stdbool.h> 
+#define MAX 100 
+#define INF 9999999 
+// Structure to store the matrix typedef 
+struct { 
+int cost[MAX][MAX]; int 
+nodes; 
+} matrix; 
+matrix adj; // Adjacency matrix 
+bool visited[MAX]; // Array to keep track of visited nodes int best_cost 
+= INF; // Best cost found so far 
+void input_matrix() { 
+printf("Enter the number of nodes: "); 
+scanf("%d", &adj.nodes); 
+printf("Enter the adjacency matrix:\n"); for (int i 
+= 0; i < adj.nodes; i++) { 
+for (int j = 0; j < adj.nodes; j++) { 
+scanf("%d", &adj.cost[i][j]); 
+} 
+} 
+} 
+int calculate_cost(int path[], int n) { int cost 
+= 0; 
+for (int i = 0; i < n - 1; i++) { 
+cost += adj.cost[path[i]][path[i+1]]; 
+} 
+return cost; 
+} 
+void print_path(int path[], int n) { 
+printf("Path: "); 
+for (int i = 0; i < n; i++) { 
+printf("%d ", path[i]); 
+} 
+printf("%d\n", path[0]); 
+} 
+void divide_and_conquer(int path[], int n) { if (n == 2) 
+{ 
+int cost = calculate_cost(path, n); if (cost < 
+best_cost) { 
+best_cost = cost; 
+print_path(path, n); 
+} 
+return; 
+} 
+for (int i = 1; i < n - 1; i++) { if 
+(!visited[i]) { 
+visited[i] = true; int 
+temp = path[i]; 
+path[i] = path[n-1]; 
+path[n-1] = temp; 
+divide_and_conquer(path, n-1); 
+visited[i] = false; 
+temp = path[i]; path[i] 
+= path[n-1]; path[n-1] = 
+temp; 
+} 
+} 
+} 
+int main() { 
+input_matrix(); 
+int path[MAX]; 
+for (int i = 0; i < adj.nodes; i++) { path[i] = i; 
+visited[i] = false; 
+} 
+visited[0] = true; divide_and_conquer(path, 
+adj.nodes); printf("Best cost: %d\n", best_cost); 
+return 0; 
+}
